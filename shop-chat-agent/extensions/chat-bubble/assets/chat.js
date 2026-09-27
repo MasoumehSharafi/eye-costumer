@@ -213,7 +213,8 @@
         // Add a header for the product results
         const header = document.createElement('div');
         header.classList.add('shop-ai-product-header');
-        header.innerHTML = '<h4>Top Matching Products</h4>';
+        const french = (document.documentElement.lang || '').startsWith('fr');
+        header.innerHTML = `<h4>${french ? 'Produits' : 'Products'}</h4>`;
         productSection.appendChild(header);
 
         // Create the product grid container
@@ -223,7 +224,7 @@
 
         if (!products || !Array.isArray(products) || products.length === 0) {
           const noProductsMessage = document.createElement('p');
-          noProductsMessage.textContent = "No products found";
+          noProductsMessage.textContent = french ? 'Aucun produit trouvé' : 'No products found';
           noProductsMessage.style.padding = "10px";
           productsContainer.appendChild(noProductsMessage);
         } else {
@@ -859,6 +860,57 @@
      * Product-related functionality
      */
     Product: {
+      normalizeVariantId: function(value) {
+        const id = String(value || '').replace(/^gid:\/\/shopify\/ProductVariant\//, '');
+        return /^\d+$/.test(id) ? id : null;
+      },
+
+      addToBag: async function(product, button) {
+        const french = (document.documentElement.lang || '').startsWith('fr');
+        const variantId = this.normalizeVariantId(product.variant_id);
+        if (!variantId) {
+          ShopAIChat.Message.add(
+            french ? "Je n’ai pas pu identifier cette variante." : "I couldn't identify this product variant.",
+            'assistant', ShopAIChat.UI.elements.messagesContainer
+          );
+          return;
+        }
+
+        const originalLabel = button.textContent;
+        button.disabled = true;
+        button.textContent = french ? 'Ajout…' : 'Adding…';
+
+        try {
+          const root = window.Shopify?.routes?.root || '/';
+          const response = await fetch(`${root}cart/add.js`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+            body: JSON.stringify({items: [{id: Number(variantId), quantity: 1}]})
+          });
+          const result = await response.json().catch(() => ({}));
+          if (!response.ok) throw new Error(result.description || result.message || 'Cart request failed');
+
+          button.textContent = french ? 'Ajouté ✓' : 'Added ✓';
+          const cartUrl = `${root}cart`;
+          const message = french
+            ? `${product.title} a été ajouté à votre panier. [Voir le panier](${cartUrl})`
+            : `${product.title} was added to your bag. [View bag](${cartUrl})`;
+          ShopAIChat.Message.add(message, 'assistant', ShopAIChat.UI.elements.messagesContainer);
+          document.dispatchEvent(new CustomEvent('cart:refresh', {detail: {source: 'eyedropshop-chat'}}));
+          document.dispatchEvent(new CustomEvent('cart:updated', {detail: {cart: result}}));
+        } catch (error) {
+          console.error('Unable to add product to bag:', error);
+          button.disabled = false;
+          button.textContent = originalLabel;
+          ShopAIChat.Message.add(
+            french
+              ? "Ce produit n’a pas pu être ajouté au panier. Il est peut-être indisponible."
+              : "This product couldn't be added to your bag. It may be unavailable.",
+            'assistant', ShopAIChat.UI.elements.messagesContainer
+          );
+        }
+      },
+
       /**
        * Create a product card element
        * @param {Object} product - Product data
@@ -907,27 +959,21 @@
         // Add product price
         const price = document.createElement('p');
         price.classList.add('shop-ai-product-price');
-        price.textContent = product.price;
-        info.appendChild(price);
+        if (product.variant_title) {
+          price.textContent = product.variant_title;
+          info.appendChild(price);
+        }
 
         // Add add-to-cart button
         const button = document.createElement('button');
         button.classList.add('shop-ai-add-to-cart');
-        button.textContent = 'Add to Cart';
-        button.dataset.productId = product.id;
+        const french = (document.documentElement.lang || '').startsWith('fr');
+        button.textContent = french ? 'Ajouter au panier' : 'Add to bag';
+        button.dataset.variantId = product.variant_id;
 
         // Add click handler for the button
         button.addEventListener('click', function() {
-          // Send message to add this product to cart
-          const input = document.querySelector('.shop-ai-chat-input input');
-          if (input) {
-            input.value = `Add ${product.title} to my cart`;
-            // Trigger a click on the send button
-            const sendButton = document.querySelector('.shop-ai-chat-send');
-            if (sendButton) {
-              sendButton.click();
-            }
-          }
+          ShopAIChat.Product.addToBag(product, button);
         });
 
         info.appendChild(button);

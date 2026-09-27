@@ -9,7 +9,7 @@ process.env.BRAIN_CUSTOMER_API_KEY='test-placeholder';
 process.env.CHAT_ALLOWED_ORIGINS='https://store.example';
 let saved=[], received;
 globalThis.chatTest={authenticate:{public:{appProxy:async request=>{if(request.headers.get('X-Test-Invalid-Proxy')) throw new Response(null,{status:401});}}},saveMessage:async(...a)=>saved.push(a), getConversationHistory:async()=>[{role:'user',content:'Compare Alpha and Beta'}],
-  createBrainService:()=>({answer:async(...args)=>{if(globalThis.failBrain) throw new Error('private connection details'); received=args;return {answer:'Grounded comparison [1] [Source 1]',trace_id:'test-trace',status:'answerable'};}}),
+  createBrainService:()=>({answer:async(...args)=>{if(globalThis.failBrain) throw new Error('private connection details'); received=args;return {answer:'Grounded comparison [1] [Source 1]',trace_id:'test-trace',status:'answerable',evidence:[{source_title:'Alpha',metadata:{product_title:'Alpha',product_id:'22',variant_id:'gid://shopify/ProductVariant/123',variant_title:'10 ml'}}]};}}),
   createSseStream,newConversationToken,validConversationToken};
 let source=await readFile(new URL('../app/routes/chat.jsx',import.meta.url),'utf8');
 source=source.replace(/^import .*;$/gm,'');
@@ -29,6 +29,7 @@ test('conversation history and French reach Brain; stream completes',async()=>{
  const r=await route.action({request:request({message:'Lequel est moins cher ?',language:'fr'})});
  const body=await r.text(); assert.ok(body.includes('Grounded comparison')); assert.ok(body.includes('end_turn'));
  assert.ok(!body.includes('[1]'));
+ assert.ok(body.includes('product_results')); assert.ok(body.includes('"variant_id":"123"'));
  assert.equal(received[1],'fr'); assert.equal(received[2][0].content,'Compare Alpha and Beta'); assert.equal(saved.length,2);
 });
 test('oversized input is rejected',async()=>assert.equal((await route.action({request:request({message:'x'.repeat(2001)})})).status,400));
@@ -60,4 +61,10 @@ test('theme chat and history use the proxy root, with query preserved',async()=>
  const url=new Function('window',fn+';return apiUrl;')({shopChatConfig:{proxyBaseUrl:'/apps/eye-agent'}});
  assert.equal(url(''),'/apps/eye-agent');
  assert.equal(url('?history=true&conversation_id=abc'),'/apps/eye-agent?history=true&conversation_id=abc');
+});
+test('theme adds variants through the Shopify Ajax cart API',async()=>{
+ const js=await readFile(new URL('../extensions/chat-bubble/assets/chat.js',import.meta.url),'utf8');
+ assert.ok(js.includes('cart/add.js'));
+ assert.ok(js.includes('items: [{id: Number(variantId), quantity: 1}]'));
+ assert.ok(!js.includes('input.value = `Add ${product.title} to my cart`'));
 });

@@ -23,6 +23,26 @@ function historyForBrain(messages) {
     return {role:m.role, content:String(content || '').slice(0,6000)};
   }).filter(m => m.content);
 }
+function commerceProducts(evidence) {
+  const products = new Map();
+  for (const item of evidence || []) {
+    const metadata = item?.metadata || {};
+    const variantId = String(metadata.variant_id || '').replace(/^gid:\/\/shopify\/ProductVariant\//, '');
+    if (!/^\d+$/.test(variantId) || products.has(variantId)) continue;
+    const title = String(metadata.product_title || item.source_title || 'Product');
+    const variantTitle = String(metadata.variant_title || '').trim();
+    const image = metadata.image_url;
+    products.set(variantId, {
+      variant_id: variantId,
+      product_id: metadata.product_id ? String(metadata.product_id) : null,
+      title,
+      variant_title: variantTitle && variantTitle !== 'Default Title' ? variantTitle : null,
+      image_url: typeof image === 'string' ? image : (image?.url || image?.src || null),
+    });
+    if (products.size === 5) break;
+  }
+  return [...products.values()];
+}
 export async function loader({request}) {
   await authenticate.public.appProxy(request);
   const h = headers(request);
@@ -59,6 +79,9 @@ export async function action({request}) {
       await saveMessage(token,'assistant',JSON.stringify([{type:'text',text:answer}]));
       console.info('[chat] completed', {trace_id:result.trace_id, status:result.status});
       stream.sendMessage({type:'chunk',chunk:answer});
+      const products = commerceProducts(result.evidence);
+      if (result.status === 'answerable' && products.length)
+        stream.sendMessage({type:'product_results',products});
       stream.sendMessage({type:'message_complete'});
     } catch {
       console.warn('[chat] dependency failure; check Brain and database health');

@@ -1516,6 +1516,15 @@ def _product_passages(
             )
         )
 
+    # Preserve the commerce identifiers needed by the Shopify storefront.
+    # These values come directly from edsAI and remain structured metadata;
+    # the language model never creates or alters them.
+    for passage in passages:
+        passage["metadata"].update({
+            "variant_title": variant_title,
+            "image_url": product.get("image"),
+        })
+
     return passages
 
 

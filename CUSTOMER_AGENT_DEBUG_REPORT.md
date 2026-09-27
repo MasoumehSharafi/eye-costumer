@@ -327,3 +327,11 @@ fallback occurs. Its regression raises the Python total to 24 passing tests.
 - Prevented duplicate submissions by disabling the chat input and send button until the active response completes.
 - Added regressions for citation normalization, mixed-section overview length, urgent safety language, and numeric citation removal.
 - Validation: 28 Python tests pass. Node tests and the production build could not be rerun in the final shell because `node` and `npm` were unavailable on its PATH; they previously passed before these focused JavaScript edits.
+
+## Shopify bag integration
+
+- Product evidence now preserves the edsAI Shopify variant ID, variant label, and image as structured metadata.
+- Answerable product responses emit deduplicated product cards for up to five variants.
+- “Add to bag” uses Shopify’s same-origin Ajax Cart API (`cart/add.js`) with a quantity of one.
+- The UI confirms successful additions, links to the bag, reports unavailable variants, supports English and French, and emits cart refresh events for compatible themes.
+- The language model never creates the commerce identifier; the route accepts only numeric Shopify variant IDs supplied by edsAI.
