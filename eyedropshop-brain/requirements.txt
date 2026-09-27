@@ -1,0 +1,14 @@
+chromadb
+sentence-transformers
+pandas
+openpyxl
+streamlit
+ollama
+fastapi==0.141.1
+pydantic==2.13.4
+uvicorn==0.52.1
+psycopg[binary]
+pgvector
+
+requests
+python-dotenv

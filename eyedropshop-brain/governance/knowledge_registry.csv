@@ -1,0 +1,30 @@
+registry_id,source,content_type,language,country,audience,approval_status,approver,knowledge_version,review_date,expires_at,notes
+gov-16c4f96b19c8,Active Products CA EN.xlsx,product,en,CA,shared,approved,,pilot-v1.1,,,Initialized from existing Brain metadata
+gov-95f691bbc683,Active Products CA FR.xlsx,product,fr,CA,shared,approved,,pilot-v1.1,,,Initialized from existing Brain metadata
+gov-7572204c79d1,return_ca_en.txt,policy,en,CA,shared,approved,,pilot-v1.1,,,Initialized from existing Brain metadata
+gov-2d538e1c789d,return_ca_fr.txt,policy,fr,CA,shared,approved,,pilot-v1.1,,,Initialized from existing Brain metadata
+gov-31f07ca3fba7,shipping_ca_en.txt,policy,en,CA,shared,approved,,pilot-v1.1,,,Initialized from existing Brain metadata
+gov-9cd2c34ac392,shipping_ca_fr.txt,policy,fr,CA,shared,approved,,pilot-v1.1,,,Initialized from existing Brain metadata
+gov-d389390b44b6,EP 01 Transcript.txt,transcript,en,CA,shared,approved,,pilot-v1.1,,,YouTube transcript pilot knowledge
+gov-b3334f422441,EP 02 Transcript.txt,transcript,en,CA,shared,approved,,pilot-v1.1,,,YouTube transcript pilot knowledge
+gov-a7f659e405ec,EP 03 Transcript.txt,transcript,en,CA,shared,approved,,pilot-v1.1,,,YouTube transcript pilot knowledge
+gov-cbcab4ba6955,EP 05 Transcript.txt,transcript,en,CA,shared,approved,,pilot-v1.1,,,YouTube transcript pilot knowledge
+gov-f3767df5dd18,EP 06 Transcript.txt,transcript,en,CA,shared,approved,,pilot-v1.1,,,YouTube transcript pilot knowledge
+gov-6eab3824553e,EP 07 Transcript.txt,transcript,en,CA,shared,approved,,pilot-v1.1,,,YouTube transcript pilot knowledge
+gov-a1f6b7047f8a,EP 08 Transcript.txt,transcript,en,CA,shared,approved,,pilot-v1.1,,,YouTube transcript pilot knowledge
+gov-18d82d81f544,EP 09 Transcript.txt,transcript,en,CA,shared,approved,,pilot-v1.1,,,YouTube transcript pilot knowledge
+gov-2ca643df8282,EP 10 Transcript.txt,transcript,en,CA,shared,approved,,pilot-v1.1,,,YouTube transcript pilot knowledge
+gov-c1e1f62b3d86,EP 11 Transcript.txt,transcript,en,CA,shared,approved,,pilot-v1.1,,,YouTube transcript pilot knowledge
+gov-ae54804a2a48,EP 12 Transcript.txt,transcript,en,CA,shared,approved,,pilot-v1.1,,,YouTube transcript pilot knowledge
+gov-61bbe1e84a16,EP 13 Transcript.txt,transcript,en,CA,shared,approved,,pilot-v1.1,,,YouTube transcript pilot knowledge
+gov-7e0d1a3da882,EP 14 Transcript.txt,transcript,en,CA,shared,approved,,pilot-v1.1,,,YouTube transcript pilot knowledge
+gov-dbe5b7798a2e,EP 15 Transcript.txt,transcript,en,CA,shared,approved,,pilot-v1.1,,,YouTube transcript pilot knowledge
+gov-1abc462cea1b,EP 16 Transcript.txt,transcript,en,CA,shared,approved,,pilot-v1.1,,,YouTube transcript pilot knowledge
+gov-35fd8e657e64,EP 17 Transcript.txt,transcript,en,CA,shared,approved,,pilot-v1.1,,,YouTube transcript pilot knowledge
+gov-a0ec9a32a809,EP 18 Transcript.txt,transcript,en,CA,shared,approved,,pilot-v1.1,,,YouTube transcript pilot knowledge
+gov-353f24f2bc15,EP 19 Transcript.txt,transcript,en,CA,shared,approved,,pilot-v1.1,,,YouTube transcript pilot knowledge
+gov-0c64ccd26e43,EP 20 Transcript.txt,transcript,en,CA,shared,approved,,pilot-v1.1,,,YouTube transcript pilot knowledge
+gov-2a3e7e6006c4,EP 21 Transcript.txt,transcript,en,CA,shared,approved,,pilot-v1.1,,,YouTube transcript pilot knowledge
+gov-63f2ae215f74,EP 22 Transcript.txt,transcript,en,CA,shared,approved,,pilot-v1.1,,,YouTube transcript pilot knowledge
+gov-2477b14b3db8,EP 23 Transcript.txt,transcript,en,CA,shared,approved,,pilot-v1.1,,,YouTube transcript pilot knowledge
+gov-aa0ae85258d7,EP 24 Transcript.txt,transcript,en,CA,shared,approved,,pilot-v1.1,,,YouTube transcript pilot knowledge

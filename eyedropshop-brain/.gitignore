@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# macOS
+.DS_Store
+
+# Logs
+logs/
+
+# Chroma databases
+chroma_db/
+chroma_products_db/
+
+# Local/generated inspection artifacts
+inspection_results/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Editor / IDE files
+.vscode/
+.idea/
+
+# Local AI/tool configuration
+.agents/
+.claude/
+.env
+.env
